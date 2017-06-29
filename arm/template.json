@@ -1,0 +1,412 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deployment_name": {
+            "defaultValue": "dz1",
+            "type": "string",
+            "metadata": {
+                "description": "Short name of the deployment to ensure no name collisions"
+            }
+        },
+        "botfunction_repo_url": {
+            "type": "string",
+            "defaultValue": "https://github.com/denniszielke/socialtweetscoringfunctions.git",
+            "metadata": {
+                "description": "The URL for the GitHub repository that contains the project to deploy."
+            }
+        },
+        "botweb_repo_url": {
+            "type": "string",
+            "defaultValue": "https://github.com/denniszielke/hackbotadvanced.git",
+            "metadata": {
+                "description": "The URL for the GitHub repository that contains the project to deploy."
+            }
+        },
+        "bot_app_id": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Get a bot id and password from https://dev.botframework.com/"
+            }
+        },
+        "bot_app_password": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Get a bot id and password from https://dev.botframework.com/"
+            }
+        }         
+    },
+    "variables": {
+        "databaseAccounts_botdb_name": "[concat(parameters('deployment_name'), 'botdb')]",
+        "accounts_luis_name": "[concat(parameters('deployment_name'), 'luis')]",
+        "components_botinsights_name": "[concat(parameters('deployment_name'), 'botinsights')]",
+        "storageAccounts_botfunc_name": "[concat(parameters('deployment_name'), 'socialfunc')]",
+        "serverfarms_funcplan_name": "[concat(parameters('deployment_name'), 'funcplan')]",
+        "serverfarms_webplan_name": "[concat(parameters('deployment_name'), 'webplan')]",
+        "sites_botweb_name": "[concat(parameters('deployment_name'), 'botweb')]",
+        "sites_botfunc_name": "[concat(parameters('deployment_name'), 'botfunc')]",
+        "config_web_name": "[concat(parameters('deployment_name'), 'botweb/web')]",
+        "config_func_name": "[concat(parameters('deployment_name'), 'botfunc/web')]",
+        "search_app_name": "[concat(parameters('deployment_name'), 'botsearch')]"
+    },
+    "resources": [
+        {
+            "comments": "Generalized from resource:",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "sku": {
+                "name": "F0"
+            },
+            "kind": "LUIS",
+            "name": "[variables('accounts_luis_name')]",
+            "apiVersion": "2016-02-01-preview",
+            "location": "westeurope",
+            "scale": null,
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource:.",
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "kind": "MongoDB",
+            "name": "[variables('databaseAccounts_botdb_name')]",
+            "apiVersion": "2015-04-08",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "defaultExperience": "MongoDB"
+            },
+            "scale": null,
+            "properties": {
+                "databaseAccountOfferType": "Standard",
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "name": "[variables('databaseAccounts_botdb_name')]"
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource:.",
+            "type": "microsoft.insights/components",
+            "kind": "Node.JS",
+            "name": "[variables('components_botinsights_name')]",
+            "apiVersion": "2014-04-01",
+            "location": "northeurope",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "ApplicationId": "[variables('components_botinsights_name')]"
+            },
+            "dependsOn": []
+        },        
+        {
+            "comments": "Generalized from resource:.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[variables('storageAccounts_botfunc_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "[resourceGroup().location]",
+            "tags": {},
+            "scale": null,
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a22a4b62-3d0a-4c60-95f9-3e8aed74d8a7/resourceGroups/social/providers/Microsoft.Web/serverfarms/NorthEuropePlan'.",
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "name": "[variables('serverfarms_funcplan_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "name": "[variables('serverfarms_funcplan_name')]",
+                "numberOfWorkers": 0
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource:",
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "D1",
+                "tier": "Shared",
+                "size": "D1",
+                "family": "D",
+                "capacity": 0
+            },
+            "kind": "app",
+            "name": "[variables('serverfarms_webplan_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "name": "[variables('serverfarms_webplan_name')]",
+                "numberOfWorkers": 0
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: .",
+            "type": "Microsoft.Web/sites",
+            "kind": "app",
+            "name": "[variables('sites_botweb_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+
+            },
+            "scale": null,
+            "properties": {
+                "name": "[variables('sites_botweb_name')]",
+                "hostNames": [
+                    "[concat(variables('sites_botweb_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(variables('sites_botweb_name'),'.azurewebsites.net')]",
+                    "[concat(variables('sites_botweb_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(variables('sites_botweb_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(variables('sites_botweb_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_webplan_name'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2014-04-01",
+                    "type": "config",
+                    "name": "web",
+                    "dependsOn": [
+                        "[resourceId('microsoft.web/sites/', variables('sites_botweb_name'))]",
+                        "[resourceId('microsoft.insights/components', variables('components_botinsights_name'))]",
+                        "[resourceId('microsoft.documentDb/databaseAccounts/', variables('databaseAccounts_botdb_name'))]"
+                    ],
+                    "properties": {
+                        "appSettings": [
+                            {
+                                "Value": "[reference(concat('microsoft.insights/components/', variables('components_botinsights_name'))).InstrumentationKey]",
+                                "Name": "INSTRUMENTATIONKEY"
+                            },
+                            {
+                                "Value": "[reference(concat('microsoft.insights/components/', variables('components_botinsights_name'))).InstrumentationKey]",
+                                "Name": "APPINSIGHTS_INSTRUMENTATIONKEY"
+                            },  
+                            {
+                                "Value": "6.9.1",
+                                "Name": "WEBSITE_NODE_DEFAULT_VERSION"
+                            },
+                            {
+                                "Value": "[reference(concat('microsoft.documentDb/databaseAccounts/', variables('databaseAccounts_botdb_name'))).documentEndpoint]",
+                                "Name": "MONGO_URL"
+                            },
+                            {
+                                "Value": "[listKeys(resourceId('microsoft.documentDb/databaseAccounts', variables('databaseAccounts_botdb_name')), '2015-04-08').primaryMasterKey]",
+                                "Name": "MONGO_KEY"
+                            },
+                            {
+                                "Value": "[variables('search_app_name')]",
+                                "Name": "SEARCH_NAME"
+                            },
+                            {
+                                "Value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('search_app_name')), '2015-08-19').PrimaryKey]",
+                                "Name": "SEARCH_KEY"
+                            },
+                            {
+                                "Value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('accounts_luis_name')), '2016-02-01-preview').key1]",
+                                "Name": "LUIS_KEY"
+                            },
+                            {
+                                "Value": "https://westeurope.api.cognitive.microsoft.com/luis/v2.0",
+                                "Name": "LUIS_URL"
+                            },
+                            {
+                                "Value": "[parameters('bot_app_id')]",
+                                "Name": "MICROSOFT_APP_ID"
+                            },
+                            {
+                                "Value": "[parameters('bot_app_password')]",
+                                "Name": "MICROSOFT_APP_PASSWORD"
+                            }
+                        ]
+                    }
+                },
+                {
+                "apiVersion": "2015-08-01",
+                "name": "web",
+                 "type": "sourcecontrols",
+                 "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('sites_botweb_name'))]"
+                ],
+                "properties": {
+                    "RepoUrl": "[parameters('botweb_repo_url')]",
+                    "branch": "master",
+                    "IsManualIntegration": true
+                    }
+                }
+            ],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_webplan_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: .",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "name": "[variables('sites_botfunc_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "name": "[variables('sites_botfunc_name')]",
+                "hostNames": [
+                    "[concat(variables('sites_botfunc_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(variables('sites_botfunc_name'),'.azurewebsites.net')]",
+                    "[concat(variables('sites_botfunc_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(variables('sites_botfunc_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(variables('sites_botfunc_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_funcplan_name'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2014-04-01",
+                    "type": "config",
+                    "name": "web",
+                    "dependsOn": [
+                        "[resourceId('microsoft.web/sites/', variables('sites_botfunc_name'))]",
+                        "[resourceId('microsoft.insights/components', variables('components_botinsights_name'))]",
+                        "[resourceId('microsoft.documentDb/databaseAccounts/', variables('databaseAccounts_botdb_name'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_botfunc_name'))]"
+                    ],
+                    "properties": {
+                        "appSettings": [
+                            {
+                                "Value": "[reference(concat('microsoft.insights/components/', variables('components_botinsights_name'))).InstrumentationKey]",
+                                "Name": "INSTRUMENTATIONKEY"
+                            },
+                            {
+                                "Value": "[reference(concat('microsoft.insights/components/', variables('components_botinsights_name'))).InstrumentationKey]",
+                                "Name": "APPINSIGHTS_INSTRUMENTATIONKEY"
+                            },                            
+                            {
+                                "Value": "[reference(concat('microsoft.documentDb/databaseAccounts/', variables('databaseAccounts_botdb_name'))).documentEndpoint]",
+                                "Name": "ENDPOINT"
+                            },
+                            {
+                                "Value": "[listKeys(resourceId('microsoft.documentDb/databaseAccounts', variables('databaseAccounts_botdb_name')), '2015-04-08').primaryMasterKey]",
+                                "Name": "AUTHKEY"
+                            },
+                            {
+                                "Value": "latest",
+                                "Name": "FUNCTIONS_EXTENSION_VERSION"
+                            },
+                            {
+                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_socialfunc_name')), '2015-05-01-preview').key1,';')]",
+                                "Name": "AzureWebJobsStorage"
+                            },
+                            {
+                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_socialfunc_name')), '2015-05-01-preview').key1,';')]",
+                                "Name": "AzureWebJobsDashboard"
+                            },
+                            {
+                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_socialfunc_name')), '2015-05-01-preview').key1,';')]",
+                                "Name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"
+                            },
+                            {
+                                "Value": "[toLower(variables('storageAccounts_botfunc_name'))]",
+                                "Name": "WEBSITE_CONTENTSHARE"
+                            },
+                            {
+                                "Value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('accounts_luis_name')), '2016-02-01-preview').key1]",
+                                "Name": "LUIS_KEY"
+                            },
+                            {
+                                "Value": "https://westeurope.api.cognitive.microsoft.com/luis/v2.0",
+                                "Name": "LUIS_URL"
+                            },
+                            {
+                                "Value": "[parameters('bot_app_id')]",
+                                "Name": "MICROSOFT_APP_ID"
+                            },
+                            {
+                                "Value": "[parameters('bot_app_password')]",
+                                "Name": "MICROSOFT_APP_PASSWORD"
+                            }
+                        ]
+                    }
+                },
+                {
+                "apiVersion": "2015-08-01",
+                "name": "web",
+                 "type": "sourcecontrols",
+                 "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('sites_botfunc_name'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_botfunc_name'))]",
+                        "[resourceId('microsoft.documentDb/databaseAccounts', variables('databaseAccounts_botdb_name'))]"
+                ],
+                "properties": {
+                    "RepoUrl": "[parameters('botfunction_repo_url')]",
+                    "branch": "master",
+                    "IsManualIntegration": true
+                    }
+                }
+            ],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_funcplan_name'))]"
+            ]
+        },
+        {
+            "apiVersion": "2015-08-19",
+            "name": "[variables('search_app_name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "basic"
+            },
+            "type": "Microsoft.Search/searchServices",
+            "properties": {
+                "replicaCount": 1,
+                "partitionCount": 1,
+                "hostingMode": "default"
+            }
+        }       
+    ]
+}
