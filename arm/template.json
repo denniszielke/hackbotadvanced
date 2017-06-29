@@ -42,7 +42,7 @@
         "databaseAccounts_botdb_name": "[concat(parameters('deployment_name'), 'botdb')]",
         "accounts_luis_name": "[concat(parameters('deployment_name'), 'luis')]",
         "components_botinsights_name": "[concat(parameters('deployment_name'), 'botinsights')]",
-        "storageAccounts_botfunc_name": "[concat(parameters('deployment_name'), 'socialfunc')]",
+        "storageAccounts_botfunc_name": "[concat(parameters('deployment_name'), 'botfunc')]",
         "serverfarms_funcplan_name": "[concat(parameters('deployment_name'), 'funcplan')]",
         "serverfarms_webplan_name": "[concat(parameters('deployment_name'), 'webplan')]",
         "sites_botweb_name": "[concat(parameters('deployment_name'), 'botweb')]",
@@ -119,7 +119,7 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/a22a4b62-3d0a-4c60-95f9-3e8aed74d8a7/resourceGroups/social/providers/Microsoft.Web/serverfarms/NorthEuropePlan'.",
+            "comments": "Generalized from resource:.",
             "type": "Microsoft.Web/serverfarms",
             "sku": {
                 "name": "Y1",
@@ -340,15 +340,15 @@
                                 "Name": "FUNCTIONS_EXTENSION_VERSION"
                             },
                             {
-                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_socialfunc_name')), '2015-05-01-preview').key1,';')]",
+                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_botfunc_name')), '2015-05-01-preview').key1,';')]",
                                 "Name": "AzureWebJobsStorage"
                             },
                             {
-                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_socialfunc_name')), '2015-05-01-preview').key1,';')]",
+                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_botfunc_name')), '2015-05-01-preview').key1,';')]",
                                 "Name": "AzureWebJobsDashboard"
                             },
                             {
-                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_socialfunc_name')), '2015-05-01-preview').key1,';')]",
+                                "Value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccounts_botfunc_name'), ';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_botfunc_name')), '2015-05-01-preview').key1,';')]",
                                 "Name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"
                             },
                             {
