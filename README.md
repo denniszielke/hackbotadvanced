@@ -5,7 +5,7 @@ author: denniszielke
 ---
 
 # Advanced bot on azure with NodeJs
-This sample shows you how to deploy a simple bot hosted on Azure Websites. 
+This sample shows you how to deploy an advanced bot hosted on Azure Websites. 
 
 ![Advanced Bot Hackathon](./images/architecture.png)
 
@@ -20,6 +20,7 @@ For a complete end-to-end walk-through of creating this application, please refe
 
 It will deploy the following resources
 - Azure Web App
+- Logic App
 - Application Insights
 - Azure Search
 - Cosmos DB
@@ -38,3 +39,6 @@ http://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/denniszie
 3. Click Run again when prompted. 
 4. This will take about 5 minutes and does the setup of prerequired software: Visual Studio Code, NodeJs, Git, Google Chrome, Fiddler4
 
+## Register your bot with Microsoft
+Go to https://dev.botframework.com/bots and create a new bot.
+Give it a name and enter the application insights values from the initial resource deployment
