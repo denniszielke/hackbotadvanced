@@ -1,0 +1,145 @@
+{
+  "luis_schema_version": "1.3.0",
+  "name": "LuisCarBot",
+  "desc": "",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "None"
+    },
+    {
+      "name": "SearchCars"
+    },
+    {
+      "name": "Help"
+    }
+  ],
+  "entities": [
+    {
+      "name": "AirportCode"
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "bing_entities": [
+    "geography"
+  ],
+  "actions": [],
+  "model_features": [
+    {
+      "name": "Near",
+      "mode": true,
+      "words": "near,around,close,nearby",
+      "activated": true
+    },
+    {
+      "name": "Show",
+      "mode": true,
+      "words": "show,find,look,search",
+      "activated": true
+    }
+  ],
+  "regex_features": [
+    {
+      "name": "AirportCodeRegex",
+      "pattern": "[a-z]{3}",
+      "activated": true
+    }
+  ],
+  "utterances": [
+    {
+      "text": "look for cars in miami",
+      "intent": "SearchCars",
+      "entities": []
+    },
+    {
+      "text": "search for cars in seattle",
+      "intent": "SearchCars",
+      "entities": []
+    },
+    {
+      "text": "show me cars in california",
+      "intent": "SearchCars",
+      "entities": []
+    },
+    {
+      "text": "what can i do?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what are the available options?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "i need help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "best cars in seattle",
+      "intent": "SearchCars",
+      "entities": []
+    },
+    {
+      "text": "cars in los angeles",
+      "intent": "SearchCars",
+      "entities": []
+    },
+    {
+      "text": "can you show me cars from los angeles?",
+      "intent": "SearchCars",
+      "entities": []
+    },
+    {
+      "text": "find cars near eze",
+      "intent": "SearchCars",
+      "entities": [
+        {
+          "entity": "AirportCode",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "show cars near att airport",
+      "intent": "SearchCars",
+      "entities": [
+        {
+          "entity": "AirportCode",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "find cars near agl",
+      "intent": "SearchCars",
+      "entities": [
+        {
+          "entity": "AirportCode",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "find cars around eze airport",
+      "intent": "SearchCars",
+      "entities": [
+        {
+          "entity": "AirportCode",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    }
+  ]
+}

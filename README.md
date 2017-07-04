@@ -10,6 +10,7 @@ This sample shows you how to deploy an advanced bot hosted on Azure Websites.
 ![Advanced Bot Hackathon](./images/architecture.png)
 
 For a complete end-to-end walk-through of creating this application, please refer to the [Bot Builder SDK for Node.js](https://docs.microsoft.com/en-us/bot-framework/nodejs/bot-builder-nodejs-overview)
+This sample is based on https://github.com/Microsoft/BotBuilder-Samples/tree/master/Node/intelligence-LUIS
 
 ## Deploying this sample
 1. Deploy the arm template in arm/template.json to azure
@@ -38,6 +39,7 @@ http://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/denniszie
 2. Click Run on the security warning. 
 3. Click Run again when prompted. 
 4. This will take about 5 minutes and does the setup of prerequired software: Visual Studio Code, NodeJs, Git, Google Chrome, Fiddler4
+5. Download the bot framework emulator from https://emulator.botframework.com/ 
 
 ## Register your bot with Microsoft
 Go to https://dev.botframework.com/bots and create a new bot.

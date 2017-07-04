@@ -41,6 +41,7 @@
     "variables": {
         "databaseAccounts_botdb_name": "[concat(parameters('deployment_name'), 'botdb')]",
         "accounts_luis_name": "[concat(parameters('deployment_name'), 'luis')]",
+        "accounts_spell_name": "[concat(parameters('deployment_name'), 'spell')]",
         "components_botinsights_name": "[concat(parameters('deployment_name'), 'botinsights')]",
         "storageAccounts_botfunc_name": "[concat(parameters('deployment_name'), 'botfunc')]",
         "serverfarms_funcplan_name": "[concat(parameters('deployment_name'), 'funcplan')]",
@@ -62,6 +63,20 @@
             "name": "[variables('accounts_luis_name')]",
             "apiVersion": "2016-02-01-preview",
             "location": "westeurope",
+            "scale": null,
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource:",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "sku": {
+                "name": "S1"
+            },
+            "kind": "Bing.SpellCheck",
+            "name": "[variables('accounts_spell_name')]",
+            "apiVersion": "2016-02-01-preview",
+            "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {},
             "dependsOn": []
@@ -244,6 +259,18 @@
                                 "Value": "https://westeurope.api.cognitive.microsoft.com/luis/v2.0",
                                 "Name": "LUIS_URL"
                             },
+                            {
+                                "Value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('accounts_spell_name')), '2016-02-01-preview').key1]",
+                                "Name": "SPELL_KEY"
+                            },
+                            {
+                                "Value": "https://api.cognitive.microsoft.com/bing/v5.0/spellcheck",
+                                "Name": "SPELL_URL"
+                            },
+                            {
+                                "Value": "true",
+                                "Name": "IS_SPELL_CORRECTION_ENABLED"
+                            },                                                      
                             {
                                 "Value": "[parameters('bot_app_id')]",
                                 "Name": "MICROSOFT_APP_ID"
