@@ -435,5 +435,35 @@
                 "hostingMode": "default"
             }
         }       
-    ]
+    ],
+    "outputs": {
+        "INSTRUMENTATIONKEY" : {
+            "type" : "string",
+            "value": "[reference(concat('microsoft.insights/components/', variables('components_botinsights_name'))).InstrumentationKey]"
+        },
+        "APPINSIGHTS_INSTRUMENTATIONKEY" : {
+            "type" : "string",
+            "value": "[reference(concat('microsoft.insights/components/', variables('components_botinsights_name'))).InstrumentationKey]"
+        },
+        "MONGO_URL" : {
+            "type" : "string",
+            "value": "[reference(concat('microsoft.documentDb/databaseAccounts/', variables('databaseAccounts_botdb_name'))).documentEndpoint]"
+        },
+        "MONGO_KEY" : {
+            "type" : "string",
+            "value": "[listKeys(resourceId('microsoft.documentDb/databaseAccounts', variables('databaseAccounts_botdb_name')), '2015-04-08').primaryMasterKey]"
+        },
+        "SEARCH_NAME" : {
+            "type" : "string",
+            "value": "[variables('search_app_name')]"
+        },
+        "SEARCH_KEY" : {
+            "type" : "string",
+            "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('search_app_name')), '2015-08-19').PrimaryKey]"
+        },
+        "SPELL_KEY" : {
+            "type" : "string",
+            "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('accounts_spell_name')), '2016-02-01-preview').key1]"
+        }
+    }
 }

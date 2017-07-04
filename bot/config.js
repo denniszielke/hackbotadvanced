@@ -19,7 +19,7 @@ config.luisKey = process.env.LUIS_KEY ? process.env.LUIS_KEY : "<YourLuisKey>";
 config.spellUrl = process.env.SPELL_URL ? process.env.SPELL_URL : "<YourBingSpellUrl>";
 config.spellKey = process.env.SPELL_KEY ? process.env.SPELL_KEY : "<YourBingSpellKey>";
 
-config.appId = process.env.MICROSOFT_APP_ID ? process.env.MICROSOFT_APP_ID : "<YourAppId>";
-config.appPassword = process.env.MICROSOFT_APP_PASSWORD ? process.env.MICROSOFT_APP_PASSWORD : "<YourAppPassword>";
+config.appId = process.env.MICROSOFT_APP_ID;
+config.appPassword = process.env.MICROSOFT_APP_PASSWORD;
 
 module.exports = config;
