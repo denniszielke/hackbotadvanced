@@ -278,6 +278,10 @@
                             {
                                 "Value": "[parameters('bot_app_password')]",
                                 "Name": "MICROSOFT_APP_PASSWORD"
+                            },
+                            {
+                                "Value": "[concat('https://', variables('sites_botfunc_name'),'.azurewebsites.net/')]",
+                                "Name": "FUNCTION_URL"
                             }
                         ]
                     }
@@ -464,6 +468,10 @@
         "SPELL_KEY" : {
             "type" : "string",
             "value": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('accounts_spell_name')), '2016-02-01-preview').key1]"
+        },
+        "FUNCTION_URL" : {
+            "type" : "string",
+            "value": "[concat('https://', variables('sites_botfunc_name'),'.azurewebsites.net/')]"
         }
     }
 }

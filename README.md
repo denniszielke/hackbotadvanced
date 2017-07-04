@@ -14,7 +14,10 @@ This sample is based on https://github.com/Microsoft/BotBuilder-Samples/tree/mas
 
 ## Register your bot with Microsoft
 Go to https://dev.botframework.com/bots and create a new bot.
-Give it a name and enter the application insights values from the initial resource deployment
+Remember the app id and app password to enter it in the next step.
+Make up a unique deployment name (best would be your initials and a two digit number).
+The messaging endpoint will be https://{deployment_name}botweb.azurewebsites.net/api/messages
+You can fill in the other values later.
 
 ## Deploying this sample
 1. Deploy the arm template in arm/template.json to azure
