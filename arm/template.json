@@ -76,7 +76,7 @@
             "kind": "Bing.SpellCheck",
             "name": "[variables('accounts_spell_name')]",
             "apiVersion": "2016-02-01-preview",
-            "location": "[resourceGroup().location]",
+            "location": "global",
             "scale": null,
             "properties": {},
             "dependsOn": []
