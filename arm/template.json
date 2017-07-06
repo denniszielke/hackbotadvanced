@@ -57,7 +57,7 @@
             "comments": "Generalized from resource:",
             "type": "Microsoft.CognitiveServices/accounts",
             "sku": {
-                "name": "F1"
+                "name": "S0"
             },
             "kind": "LUIS",
             "name": "[variables('accounts_luis_name')]",
